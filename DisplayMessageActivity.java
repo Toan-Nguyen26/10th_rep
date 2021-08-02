@@ -1,6 +1,8 @@
     package com.example.myapplication3;
 
     import androidx.appcompat.app.AppCompatActivity;
+    import androidx.recyclerview.widget.LinearLayoutManager;
+    import androidx.recyclerview.widget.RecyclerView;
 
     import android.content.Intent;
     import android.graphics.Color;
@@ -27,28 +29,40 @@
     import org.json.JSONException;
     import org.json.JSONObject;
 
+    import java.util.ArrayList;
+    import java.util.List;
+
 
     public class DisplayMessageActivity extends AppCompatActivity {
+        private RecyclerView mRecyclerReview;
         private TextView mTextVIewResult;
         private RequestQueue mQueqe;
-
+        private Adapter mAdapter;
+        private ArrayList<Web> mWeb;
         @Override
+
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_display_message);
+            setContentView(R.layout.recycler);
 
+            //Goddammit
+            mRecyclerReview = findViewById(R.id.recycler_view);
+            mRecyclerReview.setHasFixedSize(true);
+            mRecyclerReview.setLayoutManager(new LinearLayoutManager(this));
+
+            mWeb = new ArrayList<>();
             // Get the Intent that started this activity and extract the string
             Intent intent = getIntent();
             String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-            mTextVIewResult = findViewById(R.id.text_view_result);
-            mTextVIewResult.setClickable(true);
-            mTextVIewResult.setMovementMethod(LinkMovementMethod.getInstance());
+//            mTextVIewResult = findViewById(R.id.text_view_result);
+//            mTextVIewResult.setClickable(true);
+//            mTextVIewResult.setMovementMethod(LinkMovementMethod.getInstance());
             //WebView myWebView = (WebView) findViewById(R.id.webView);
-
-            //myWebView.loadUrl(test);
             mQueqe = Volley.newRequestQueue(this);
+            //myWebView.loadUrl(test);
+
             jsonParse(message);
-            mTextVIewResult.setMovementMethod(new ScrollingMovementMethod());
+            //mTextVIewResult.setMovementMethod(new ScrollingMovementMethod());
         }
 
 
@@ -69,16 +83,19 @@
                                 String url = web.getString("url");
                                 //Settings for text sizes and color
                                 //String text = "<a href='http://www.google.com'> Google </a>";
-                                String link = "href='" + url + "'";
-                                title = "<a " + link + ">" + title + "</a>";
-                                title =  "<h4>" + title + "</h4>";
+                                //String link = "href='" + url + "'";
+                                //title = "<a " + link + ">" + title + "</a>";
+                                //title =  "<h4>" + title + "</h4>";
 
                                 //Return view the word
-
-                                mTextVIewResult.append(url + "\n");
-                                mTextVIewResult.append(Html.fromHtml(title));
-                                mTextVIewResult.append(des + "\n\n\n");
+                                //String link = "<a href= ' " + url + "'>"  + title + "</a>";
+                                mWeb.add(new Web(url,title,des));
+//                                mTextVIewResult.append(url + "\n");
+//                                mTextVIewResult.append(Html.fromHtml(title));
+//                                mTextVIewResult.append(des + "\n\n\n");
                             }
+                            mAdapter = new Adapter(DisplayMessageActivity.this, mWeb);
+                            mRecyclerReview.setAdapter(mAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
