@@ -9,4 +9,4 @@ The Java web app was built for Android phones. It functions like a normal Google
 
 # Note
 
-The app was canceled and stopped working due to VM on Google Cloud expired on October, 2021.
+The app was canceled and stopped working due to VM cancelled on Google Cloud expired on October, 2021.
